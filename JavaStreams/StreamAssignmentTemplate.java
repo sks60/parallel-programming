@@ -84,9 +84,10 @@ public class StreamAssignmentTemplate {
 	public static List<String> uniqueWordList(String file){
 		
 		List<String> result = toWordStream(file)
-										.distinct()
-										.sorted(Comparator.reverseOrder())
-										.collect(Collectors.toList());
+			.distinct()
+			.sorted(Comparator.reverseOrder())
+			.collect(Collectors.toList());
+		
 		System.out.println(result.size());
 		return result;
 	}
@@ -105,12 +106,12 @@ public class StreamAssignmentTemplate {
 		//https://stackoverflow.com/questions/46341610/show-all-the-longest-words-from-finite-stream
 		//https://stackoverflow.com/questions/35384145/system-out-println-of-streamreduce-unexpectedly-prints-optional-around
 		String result = toWordStream(file)
-										.reduce(" ", (s1, s2) -> {
-											if (s1.length() > s2.length())
-												return s1;
-											else
-												return s2;
-										});
+			.reduce(" ", (s1, s2) -> {
+				if (s1.length() > s2.length())
+					return s1;
+				else
+					return s2;
+			});
 		
 		return result;
 	}
@@ -130,13 +131,14 @@ public class StreamAssignmentTemplate {
 	 */
 	public static long wordsWithThreeLettersCount(String file){
 		
-		Long result = toWordStream(file).reduce(0L, (tally, word) -> { 
-														if (word.length() == 3) { 
-															return tally += 1; 
-														} else { 
-															return tally; 
-														}
-													}, (tally1, tally2) -> tally1 + tally2);
+		Long result = toWordStream(file).reduce(0L, (tally, word) -> {
+			if (word.length() == 3) {
+				return tally += 1;
+			} else {
+				return tally; 
+			}
+		}, (tally1, tally2) -> tally1 + tally2);
+		
 		return result;
 	}
 	
@@ -152,16 +154,16 @@ public class StreamAssignmentTemplate {
 	 */
 	public static double avergeWordlength(String file){
 		double[] sumCount = toWordStream(file).reduce(new double[]{0.0,0.0}, (array, nextWord) -> {
-																array[0] += nextWord.length();
-																array[1] += 1;
-																return array;
-															}, (x,y) -> {
-																x[0] += y[0];
-																x[1] += y[1];
-																return x;
-															});
+			array[0] += nextWord.length();
+			array[1] += 1;
+			return array;
+		}, (x,y) -> {
+			x[0] += y[0];
+			x[1] += y[1];
+			return x;
+		});
+		
 		double average = sumCount[0] / sumCount[1];
-	
 		return average;
 	}
 	
@@ -177,9 +179,9 @@ public class StreamAssignmentTemplate {
 	public static Map<String,Integer> toWordCountMap(String file){
 		//for integer https://stackoverflow.com/a/25512294
 		Map<String, Integer> stringMap = toWordStream(file)
-				.collect(Collectors.groupingBy(s -> s.toString(), Collectors.reducing(0, e -> 1, Integer::sum)));
+			.collect(Collectors.groupingBy(s -> s.toString(),Collectors.reducing(0, e -> 1, Integer::sum)));
 
-      	return stringMap;
+		return stringMap;
 	}
 	
 	/**
@@ -195,7 +197,7 @@ public class StreamAssignmentTemplate {
 	public static Map<String,Set<String>> groupWordByFirstLetter(String file){
 		
 		Map<String, Set<String>> group = toWordStream(file)
-										.collect(Collectors.groupingBy(s -> String.valueOf(s.charAt(0)), Collectors.toSet()));
+			.collect(Collectors.groupingBy(s -> String.valueOf(s.charAt(0)), Collectors.toSet()));
 		
 		return group;
 	}
@@ -233,21 +235,20 @@ public class StreamAssignmentTemplate {
 		}
 		final long time2 = System.nanoTime();
 		Stream<Object[]> lines = reader.lines().parallel()
-									.map(line -> {
-													Object[] result = new Object[2];
-													result[0] = pf.apply(line, targetString); //apply the lambda in parameter sent
-													result[1] = line; //this is the line in which it is found
-													return result;
-													})
-									.sorted((i1, i2) -> { //sort in descending order 
-															if ((Integer) i1[0] > (Integer) i2[0]) 
-																return -1;
-															else if((Integer) i1[0] < (Integer) i2[0])
-																return 1;
-															else
-																return 0;
-															})
-									.limit(20);
+			.map(line -> {
+				Object[] result = new Object[2];
+				result[0] = pf.apply(line, targetString); //apply the lambda in parameter sent
+				result[1] = line; //this is the line in which it is found
+				return result;
+				.sorted((i1, i2) -> { //sort in descending order 
+					if ((Integer) i1[0] > (Integer) i2[0]) 
+						return -1;
+					else if((Integer) i1[0] < (Integer) i2[0])
+						return 1;
+					else
+						return 0;
+				}).limit(20);
+				
 		//lines.forEach(x -> System.out.println(x[0] + ": " + x[1]));//for not parallel 
 		lines.forEachOrdered(x -> System.out.println(x[0] + ": " + x[1])); // for parallel to keep the final joined streams ordered
 		final long time3 = System.nanoTime();
