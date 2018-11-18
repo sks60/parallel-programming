@@ -1,0 +1,44 @@
+#From http://www.ranks.nl/resources/stopwords.html 
+#The short
+#stopwords list below is based on what we believed to be Google
+#stopwords a few years ago, based on words that were ignored if you
+#would search for them in combination with another word. (ie. as in the
+#phrase "a keyword").  Last time we checked using stopwords in
+#search terms did matter, results will be different.
+#
+#We do believe stopwords (and other non-relevant text parts such as
+#navigation menus) are filtered out of the text by Google and other
+#search engines to help determine what a page is about.
+#
+I
+a
+about
+an
+are
+as
+at
+be
+by
+com
+for
+from
+how
+in
+is
+it
+of
+on
+or
+that
+the
+this
+to
+was
+what
+when
+where
+who
+will
+with
+the
+www
